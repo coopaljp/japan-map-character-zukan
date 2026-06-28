@@ -1,0 +1,513 @@
+:root {
+  color: #4d372f;
+  background: #fff6df;
+  font-family: "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
+  font-size: 17px;
+  --ink: #4d372f;
+  --brown: #7a4a35;
+  --cream: #fff8e8;
+  --paper: #fffdf4;
+  --sakura: #f49ab0;
+  --sakura-dark: #d86882;
+  --sun: #ffd86f;
+  --leaf: #8fc85f;
+  --sky: #9fd8ea;
+  --shadow: rgba(122, 74, 53, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button {
+  border: 2px solid rgba(122, 74, 53, 0.16);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fffef8, #fff3d6);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  min-height: 48px;
+  box-shadow: 0 5px 0 var(--shadow);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(244, 154, 176, 0.34), transparent 28%),
+    radial-gradient(circle at 88% 4%, rgba(255, 216, 111, 0.38), transparent 30%),
+    linear-gradient(180deg, #fff2ca 0, #fff8e8 330px, #fff6df 100%);
+  padding-bottom: 86px;
+}
+
+.page {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.page-header {
+  padding: 22px 0 14px;
+}
+
+.eyebrow {
+  color: var(--sakura-dark);
+  font-weight: 800;
+  margin: 0 0 8px;
+}
+
+h1 {
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 1.05;
+  margin: 0;
+  text-shadow: 0 3px 0 rgba(255, 255, 255, 0.9);
+}
+
+h2,
+.section-title {
+  font-size: 1.35rem;
+  margin: 28px 0 12px;
+  color: var(--brown);
+}
+
+.home-hero {
+  background: var(--paper);
+  border: 4px solid rgba(122, 74, 53, 0.14);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(122, 74, 53, 0.16);
+  margin: 10px 0 18px;
+  overflow: hidden;
+  position: relative;
+}
+
+.home-hero img {
+  aspect-ratio: 1792 / 1024;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+.hero-overlay {
+  background: linear-gradient(90deg, rgba(255, 248, 232, 0.94), rgba(255, 248, 232, 0.82), rgba(255, 248, 232, 0.52));
+  border-bottom: 2px solid rgba(255, 255, 255, 0.72);
+  left: 0;
+  padding: 18px 24px 20px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.hero-overlay p:last-child {
+  color: #75564a;
+  font-size: 1.08rem;
+  font-weight: 700;
+  margin: 8px 0 0;
+}
+
+.hero-overlay h1 {
+  font-size: clamp(1.65rem, 4.2vw, 3rem);
+}
+
+.hero-actions,
+.quick-links,
+.region-grid,
+.quiz-options {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.primary-action,
+.secondary-action,
+.quick-links button,
+.region-grid button,
+.quiz-options button,
+.review-panel button {
+  padding: 16px;
+}
+
+.region-actions {
+  margin-top: 28px;
+}
+
+.primary-action {
+  background: linear-gradient(180deg, #ffe68f, #ffc94d);
+  border-color: rgba(153, 95, 30, 0.18);
+  color: #614016;
+  font-size: 1.25rem;
+}
+
+.secondary-action {
+  background: linear-gradient(180deg, #fbc0ce, #f594aa);
+  border-color: rgba(216, 104, 130, 0.22);
+  color: #6c2030;
+}
+
+.full {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.stats-strip {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 18px 0;
+}
+
+.stats-strip div,
+.review-panel,
+.score-box,
+.prefecture-card {
+  background: rgba(255, 253, 244, 0.94);
+  border: 3px solid rgba(122, 74, 53, 0.11);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 8px 18px rgba(122, 74, 53, 0.08);
+}
+
+.stats-strip strong,
+.review-panel strong {
+  display: block;
+  font-size: 1.7rem;
+}
+
+.stats-strip span {
+  color: #89675b;
+  font-size: 0.88rem;
+}
+
+.prefecture-list {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.prefecture-list button {
+  align-items: center;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 54px 1fr auto;
+  padding: 10px;
+  text-align: left;
+}
+
+.prefecture-list small,
+.dex-card small,
+.badge {
+  background: #fff0f4;
+  border-radius: 999px;
+  color: #a5415a;
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 5px 9px;
+}
+
+.empty {
+  background: rgba(255, 253, 244, 0.82);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.japan-map {
+  width: 100%;
+  min-height: 360px;
+  background: #fffdf4;
+  border: 3px solid rgba(122, 74, 53, 0.13);
+  border-radius: 8px;
+  display: block;
+  overflow: hidden;
+}
+
+.map-pref {
+  cursor: pointer;
+  fill: #fffaf0;
+  stroke: #b58b73;
+  stroke-width: 1.3;
+  transition: transform 0.15s ease, fill 0.15s ease;
+}
+
+.japan-map svg {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.japan-map svg .prefecture {
+  outline: none;
+}
+
+.japan-map svg .prefecture,
+.japan-map svg .prefecture * {
+  cursor: pointer;
+  pointer-events: bounding-box;
+}
+
+.japan-map svg .prefecture:focus-visible {
+  filter: drop-shadow(0 0 6px rgba(13, 123, 130, 0.65));
+}
+
+.prefecture-hit-area {
+  fill: transparent;
+  pointer-events: all;
+  stroke: none;
+}
+
+.map-pref:hover {
+  filter: brightness(1.04);
+}
+
+.map-pref.visited {
+  fill: #cfe9a3;
+}
+
+.map-pref.weak {
+  fill: #ffb7c6;
+}
+
+.map-pref.master,
+.map-pref.highlight {
+  fill: #ffd86f;
+}
+
+.map-pref.new {
+  fill: #fff8e8;
+}
+
+.japan-map text {
+  fill: #253043;
+  font-size: 0.28px;
+  font-weight: 800;
+  pointer-events: none;
+}
+
+.prefecture-card {
+  align-items: center;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 180px 1fr;
+}
+
+.character-icon {
+  align-items: center;
+  aspect-ratio: 1;
+  background: #fff8e8;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  width: 54px;
+}
+
+.character-icon.large {
+  width: 170px;
+}
+
+.character-icon img {
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+  transition: filter 0.2s ease, transform 0.2s ease;
+  width: 100%;
+}
+
+.character-icon span {
+  color: #8a6558;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.character-icon.undiscovered {
+  background: rgba(137, 103, 91, 0.08);
+  border-color: rgba(137, 103, 91, 0.18);
+  border-style: dashed;
+}
+
+.character-icon.met img {
+  filter: brightness(0) opacity(0.48);
+}
+
+.character-icon.friendly img {
+  filter: blur(8px) saturate(0.85);
+  transform: scale(1.05);
+}
+
+.character-icon.buddy img {
+  filter: blur(3px) saturate(0.95);
+  transform: scale(1.03);
+}
+
+.character-icon.master img {
+  filter: none;
+  transform: none;
+}
+
+.character-icon.friendly {
+  background: #ffe4eb;
+}
+
+.character-icon.buddy {
+  background: #eef8d5;
+  border-color: #9acb65;
+}
+
+.character-icon.master {
+  background: #fff1aa;
+  border-color: #d79b00;
+}
+
+.effect {
+  bottom: 0;
+  color: #e43d62;
+  font-style: normal;
+  font-weight: 900;
+  position: absolute;
+  right: 4px;
+}
+
+.sparkle,
+.crown {
+  color: #d79b00;
+}
+
+.dex-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.dex-card {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 178px;
+  padding: 14px;
+}
+
+.dex-card.master {
+  outline: 3px solid #dca400;
+}
+
+.review-panel {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: auto 1fr auto;
+}
+
+.result {
+  border-radius: 8px;
+  margin-top: 18px;
+  padding: 18px;
+}
+
+.result.correct {
+  background: #eaf7ce;
+}
+
+.result.wrong {
+  background: #ffe0e8;
+}
+
+.progress-bars {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.progress-bars div {
+  align-items: center;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 130px 1fr auto;
+}
+
+meter {
+  width: 100%;
+}
+
+.danger {
+  background: #ffe0e8;
+  color: #8f273f;
+  margin-top: 20px;
+  padding: 14px;
+}
+
+.bottom-nav {
+  background: rgba(255, 253, 244, 0.97);
+  border-top: 2px solid rgba(122, 74, 53, 0.14);
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  left: 0;
+  position: fixed;
+  right: 0;
+  z-index: 10;
+}
+
+.bottom-nav button {
+  align-items: center;
+  border-radius: 0;
+  box-shadow: none;
+  color: #5c6778;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.78rem;
+  gap: 3px;
+  min-height: 70px;
+  padding-top: 12px;
+}
+
+.bottom-nav button.active {
+  color: var(--sakura-dark);
+}
+
+@media (max-width: 680px) {
+  .page {
+    padding: 14px;
+  }
+
+  .stats-strip,
+  .prefecture-card,
+  .review-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .prefecture-card {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .japan-map {
+    min-height: 300px;
+  }
+
+  .hero-overlay {
+    padding: 14px 16px 16px;
+  }
+
+  .hero-overlay h1 {
+    font-size: clamp(1.45rem, 7.5vw, 2.2rem);
+  }
+
+  .prefecture-list button {
+    grid-template-columns: 48px 1fr;
+  }
+
+  .prefecture-list small {
+    grid-column: 2;
+  }
+}
