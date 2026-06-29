@@ -127,6 +127,7 @@ h2,
 }
 
 .primary-action,
+.challenge-action,
 .secondary-action,
 .quick-links button,
 .region-grid button,
@@ -152,6 +153,13 @@ h2,
   color: #6c2030;
 }
 
+.challenge-action {
+  background: linear-gradient(180deg, #bdeef8, #7fcddd);
+  border-color: rgba(58, 148, 164, 0.2);
+  color: #205b66;
+  font-size: 1.18rem;
+}
+
 .full {
   width: 100%;
   margin-top: 18px;
@@ -160,12 +168,13 @@ h2,
 .stats-strip {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   margin: 18px 0;
 }
 
 .stats-strip div,
 .review-panel,
+.challenge-panel,
 .score-box,
 .prefecture-card {
   background: rgba(255, 253, 244, 0.94);
@@ -247,10 +256,17 @@ h2,
   outline: none;
 }
 
-.japan-map svg .prefecture,
-.japan-map svg .prefecture * {
+.japan-map svg .prefecture {
+  pointer-events: auto;
+}
+
+.japan-map svg .prefecture path,
+.japan-map svg .prefecture polygon,
+.japan-map svg .prefecture polyline,
+.japan-map svg .prefecture circle,
+.japan-map svg .prefecture ellipse {
   cursor: pointer;
-  pointer-events: bounding-box;
+  pointer-events: visiblePainted;
 }
 
 .japan-map svg .prefecture:focus-visible {
@@ -263,7 +279,7 @@ h2,
   stroke: none;
 }
 
-.map-pref:hover {
+.map-pref.map-hover {
   filter: brightness(1.04);
 }
 
@@ -282,6 +298,10 @@ h2,
 
 .map-pref.new {
   fill: #fff8e8;
+}
+
+.map-pref.quiz {
+  fill: #fffaf0;
 }
 
 .japan-map text {
@@ -401,11 +421,57 @@ h2,
   outline: 3px solid #dca400;
 }
 
+.dex-card.point-master {
+  background: linear-gradient(180deg, #fffdf4, #fff0c7);
+  border-color: rgba(215, 155, 0, 0.3);
+}
+
+.dex-card.point-master.master {
+  box-shadow: 0 0 0 4px rgba(255, 216, 111, 0.55), 0 10px 22px rgba(122, 74, 53, 0.14);
+}
+
 .review-panel {
   align-items: center;
   display: grid;
   gap: 12px;
   grid-template-columns: auto 1fr auto;
+}
+
+.challenge-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.challenge-progress {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.challenge-progress span {
+  background: #ead7bd;
+  border-radius: 999px;
+  display: block;
+  height: 12px;
+}
+
+.challenge-progress span.current {
+  background: var(--sakura);
+}
+
+.challenge-progress span.done {
+  background: var(--leaf);
+}
+
+.challenge-actions {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-top: 14px;
+}
+
+.challenge-actions button {
+  padding: 14px;
 }
 
 .result {

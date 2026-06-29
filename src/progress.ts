@@ -26,6 +26,7 @@ export type PrefectureProgress = {
 export type ProgressState = Record<string, PrefectureProgress>;
 
 const STORAGE_KEY = "japan-map-character-zukan-progress-v2";
+const POINTS_STORAGE_KEY = "japan-map-character-zukan-points-v1";
 
 export const todayString = () => new Date().toISOString().slice(0, 10);
 
@@ -82,8 +83,30 @@ export const saveProgress = (progress: ProgressState) => {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 };
 
+export const loadPoints = () => {
+  try {
+    const value = Number(window.localStorage.getItem(POINTS_STORAGE_KEY));
+    return Number.isFinite(value) && value > 0 ? value : 0;
+  } catch {
+    return 0;
+  }
+};
+
+export const savePoints = (points: number) => {
+  window.localStorage.setItem(POINTS_STORAGE_KEY, String(Math.max(0, Math.floor(points))));
+};
+
+export const getPointCharacterStage = (points: number): CharacterStage => {
+  if (points >= 10000) return "master";
+  if (points >= 5000) return "buddy";
+  if (points >= 3000) return "friendly";
+  if (points >= 1000) return "met";
+  return "undiscovered";
+};
+
 export const clearProgress = () => {
   window.localStorage.removeItem(STORAGE_KEY);
+  window.localStorage.removeItem(POINTS_STORAGE_KEY);
 };
 
 export const visitPrefecture = (progress: ProgressState, prefectureId: string): ProgressState => {
@@ -165,6 +188,32 @@ export const updateQuizResult = (
   }
 
   next[prefectureId] = item;
+  return next;
+};
+
+export const updateChallengeResult = (
+  progress: ProgressState,
+  prefectureId: string,
+  quizType: QuizType,
+  isCorrect: boolean,
+): ProgressState => {
+  const item = progress[prefectureId];
+  if (!item?.visited) return progress;
+
+  const today = todayString();
+  const next = structuredClone(progress);
+  const nextItem = next[prefectureId];
+
+  if (isCorrect) {
+    nextItem[correctKey(quizType)] += 1;
+    nextItem.lastCorrectAt = today;
+    nextItem.isWeak = false;
+  } else {
+    nextItem[wrongKey(quizType)] += 1;
+    nextItem.lastWrongAt = today;
+    nextItem.isWeak = true;
+  }
+
   return next;
 };
 
