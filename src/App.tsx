@@ -26,6 +26,22 @@ type Route = {
   query: URLSearchParams;
 };
 
+const basePath = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const basePathWithoutSlash = basePath === "/" ? "" : basePath.replace(/\/$/, "");
+
+const stripBasePath = (pathname: string) => {
+  if (!basePathWithoutSlash) return pathname || "/";
+  if (pathname === basePathWithoutSlash) return "/";
+  if (pathname.startsWith(`${basePathWithoutSlash}/`)) return pathname.slice(basePathWithoutSlash.length) || "/";
+  return pathname || "/";
+};
+
+const toBrowserPath = (path: string) => {
+  const appPath = path.startsWith("/") ? path : `/${path}`;
+  if (!basePathWithoutSlash) return appPath;
+  return appPath === "/" ? `${basePathWithoutSlash}/` : `${basePathWithoutSlash}${appPath}`;
+};
+
 type CharacterLike = Pick<Prefecture, "id" | "name" | "characterName" | "characterImage">;
 type ChallengeMode = "nameToLocation" | "locationToName" | "nameToCapital" | "capitalToName";
 type ChallengeQuestion = {
@@ -44,15 +60,16 @@ const challengeModes: ChallengeMode[] = ["nameToLocation", "locationToName", "na
 const allRegionIds = regions.map((region) => region.id);
 
 const navigate = (path: string) => {
-  window.history.pushState(null, "", path);
+  window.history.pushState(null, "", toBrowserPath(path));
   window.dispatchEvent(new Event("popstate"));
   window.scrollTo({ top: 0 });
 };
 
 const useRoute = (): Route => {
-  const [route, setRoute] = useState<Route>({ path: window.location.pathname, query: new URLSearchParams(window.location.search) });
+  const currentRoute = () => ({ path: stripBasePath(window.location.pathname), query: new URLSearchParams(window.location.search) });
+  const [route, setRoute] = useState<Route>(currentRoute);
   useEffect(() => {
-    const update = () => setRoute({ path: window.location.pathname, query: new URLSearchParams(window.location.search) });
+    const update = () => setRoute(currentRoute());
     window.addEventListener("popstate", update);
     return () => window.removeEventListener("popstate", update);
   }, []);
@@ -237,6 +254,7 @@ function App() {
 }
 
 function BottomNavigation() {
+  const currentPath = stripBasePath(window.location.pathname);
   const items = [
     ["/", Home, "ホーム"],
     ["/map", Map, "地図"],
@@ -247,7 +265,7 @@ function BottomNavigation() {
   return (
     <nav className="bottom-nav">
       {items.map(([path, Icon, label]) => (
-        <button key={path} className={window.location.pathname === path ? "active" : ""} onClick={() => navigate(path)}>
+        <button key={path} className={currentPath === path ? "active" : ""} onClick={() => navigate(path)}>
           <Icon size={22} />
           <span>{label}</span>
         </button>
