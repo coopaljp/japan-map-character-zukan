@@ -59,6 +59,8 @@ const pointMasterCharacter: CharacterLike = {
 const challengeModes: ChallengeMode[] = ["nameToLocation", "locationToName", "nameToCapital", "capitalToName"];
 const allRegionIds = regions.map((region) => region.id);
 
+const normalizeMapCode = (code: string | undefined) => code?.replace(/^0+/, "") ?? "";
+
 const navigate = (path: string) => {
   window.history.pushState(null, "", toBrowserPath(path));
   window.dispatchEvent(new Event("popstate"));
@@ -161,7 +163,7 @@ const findPrefectureIdFromPoint = (container: HTMLDivElement, x: number, y: numb
     if (!container.contains(element) || element.classList.contains("prefecture-hit-area") || !isMapShape(element)) return false;
     return !!element.closest(".prefecture[data-code]");
   });
-  const visibleCode = visibleShape?.closest<SVGGElement>(".prefecture[data-code]")?.dataset.code;
+  const visibleCode = normalizeMapCode(visibleShape?.closest<SVGGElement>(".prefecture[data-code]")?.dataset.code);
   if (visibleCode && prefectureByCode[visibleCode]) return prefectureByCode[visibleCode].id;
 
   const shapes = Array.from(container.querySelectorAll<SVGGeometryElement>(".prefecture[data-code] path, .prefecture[data-code] polygon, .prefecture[data-code] polyline, .prefecture[data-code] rect, .prefecture[data-code] circle, .prefecture[data-code] ellipse"))
@@ -171,7 +173,7 @@ const findPrefectureIdFromPoint = (container: HTMLDivElement, x: number, y: numb
       if (typeof shape.getScreenCTM !== "function" || typeof shape.isPointInFill !== "function") return null;
       const matrix = shape.getScreenCTM();
       const prefectureElement = shape.closest<SVGGElement>(".prefecture[data-code]");
-      const code = prefectureElement?.dataset.code;
+      const code = normalizeMapCode(prefectureElement?.dataset.code);
       const prefecture = code ? prefectureByCode[code] : undefined;
       if (!matrix || !prefecture) return null;
       const point = new DOMPoint(x, y).matrixTransform(matrix.inverse());
@@ -190,7 +192,7 @@ const findPrefectureIdFromPoint = (container: HTMLDivElement, x: number, y: numb
     .map((hitArea) => {
       const rect = hitArea.getBoundingClientRect();
       const prefectureElement = hitArea.closest<SVGGElement>(".prefecture[data-code]");
-      const code = prefectureElement?.dataset.code;
+      const code = normalizeMapCode(prefectureElement?.dataset.code);
       const prefecture = code ? prefectureByCode[code] : undefined;
       return { prefecture, rect, area: rect.width * rect.height };
     })
@@ -201,7 +203,7 @@ const findPrefectureIdFromPoint = (container: HTMLDivElement, x: number, y: numb
 
   const target = document.elementFromPoint(x, y);
   const element = target?.closest?.<SVGGElement>(".prefecture[data-code]");
-  const code = element?.dataset.code;
+  const code = normalizeMapCode(element?.dataset.code);
   return code ? prefectureByCode[code]?.id : undefined;
 };
 
@@ -209,8 +211,7 @@ const setMapHover = (container: HTMLDivElement, x: number, y: number) => {
   const id = findPrefectureIdFromPoint(container, x, y);
   container.querySelectorAll(".map-hover").forEach((element) => element.classList.remove("map-hover"));
   if (!id) return;
-  const prefecture = prefectureById[id];
-  const element = prefecture ? container.querySelector<SVGGElement>(`.prefecture[data-code="${prefecture.code}"]`) : null;
+  const element = container.querySelector<SVGGElement>(`.prefecture[data-prefecture-id="${id}"]`);
   element?.classList.add("map-hover");
 };
 
@@ -393,7 +394,7 @@ function JapanMap({
     const container = containerRef.current;
     const prefectureElements = container.querySelectorAll<SVGGElement>(".prefecture[data-code]");
     prefectureElements.forEach((element) => {
-      const code = element.dataset.code;
+      const code = normalizeMapCode(element.dataset.code);
       const prefecture = code ? prefectureByCode[code] : undefined;
       if (!prefecture) return;
       const item = progress[prefecture.id];
@@ -403,6 +404,7 @@ function JapanMap({
       element.setAttribute("role", "button");
       element.setAttribute("tabindex", "0");
       element.setAttribute("aria-label", prefecture.name);
+      element.dataset.prefectureId = prefecture.id;
       element.querySelectorAll(".prefecture-hit-area").forEach((hitArea) => hitArea.remove());
       const shapes = Array.from(element.children).filter(isMapShape) as SVGGraphicsElement[];
       shapes.forEach((shape) => {
@@ -437,7 +439,7 @@ function JapanMap({
   const handleMapKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== "Enter" && event.key !== " ") return;
     const target = (event.target as Element).closest<SVGGElement>(".prefecture[data-code]");
-    const code = target?.dataset.code;
+    const code = normalizeMapCode(target?.dataset.code);
     const prefecture = code ? prefectureByCode[code] : undefined;
     if (prefecture) {
       event.preventDefault();

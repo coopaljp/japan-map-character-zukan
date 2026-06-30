@@ -562,11 +562,18 @@ meter {
   }
 
   .hero-overlay {
-    padding: 14px 16px 16px;
+    padding: 8px 12px 9px;
   }
 
   .hero-overlay h1 {
-    font-size: clamp(1.45rem, 7.5vw, 2.2rem);
+    font-size: clamp(1.12rem, 5.4vw, 1.55rem);
+    line-height: 1.08;
+  }
+
+  .hero-overlay p:last-child {
+    font-size: 0.78rem;
+    line-height: 1.35;
+    margin-top: 4px;
   }
 
   .prefecture-list button {
